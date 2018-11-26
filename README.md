@@ -1,1 +1,1 @@
-#Lokaverkefni C++
+# Lokaverkefni C++
