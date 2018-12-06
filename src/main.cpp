@@ -19,15 +19,22 @@ int main() {
     
     // Window
     int winW, winH;
-    winW = 100;
-    winH = winW/3;
+    winW = 50;
+    winH = winW/4;
     WINDOW *win; 
     win = newwin(winH, winW, (h/2) - (winH/2), (w/2) - (winW/2));
     box(win, 0, 0);
-    wmove(win, winH/2, winW/2);
-    waddch(win, 'd');
-    wmove(win, 0, 0);
-    wchgat(win, -1, COLOR_PAIR(1), 0, NULL);
+    string strs[3];
+    wattron(win, A_DIM);
+    strs[0] = "Use previous email";
+    strs[1] = "Set up new email";
+    strs[2] = "Quit";
+    mvwprintw(win, winH/2 - 1, winW/2 - (strs[0].size()/2), strs[0].c_str());
+    wmove(win, winH/2 - 1, winW/2 - (strs[0].size()/2) - 1);
+    wchgat(win, strs[0].size() + 2, A_NORMAL, 0, NULL);
+    mvwprintw(win, winH/2, winW/2 - (strs[1].size()/2), strs[1].c_str());
+    mvwprintw(win, winH/2 + 1, winW/2 - (strs[2].size()/2), strs[2].c_str());
+    curs_set(0);
     wrefresh(win);
     
     getch();
