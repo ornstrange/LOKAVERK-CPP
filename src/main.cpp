@@ -2,8 +2,15 @@
 #include <string>
 #include <curses.h>
 #include <vmime/vmime.hpp>
-
+#include "strings.hpp"
 using namespace std;
+
+// Macros
+#define asize(x) sizeof((x))/sizeof(*(x))
+
+// Helper declerations
+WINDOW * createWindow(int x, int y, int w, int h);
+void wMenuText(WINDOW *win, string *strings, int len);
 
 int main() {
     // Init
@@ -16,6 +23,12 @@ int main() {
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, h, w);
     refresh();
+
+    // Windows
+    WINDOW *loginWin;
+    loginWin = createWindow(0,0,50,11);
+    wMenuText(loginWin, sendMenu, asize(sendMenu));
+    /*
     
     // Window
     int winW, winH;
@@ -36,10 +49,29 @@ int main() {
     mvwprintw(win, winH/2 + 1, winW/2 - (strs[2].size()/2), strs[2].c_str());
     curs_set(0);
     wrefresh(win);
+    */
     
     getch();
 
-    // End
     endwin();
     return 0;
+}
+
+// Curses helpers
+WINDOW * createWindow(int x, int y, int w, int h) {
+    WINDOW *_win;
+    _win = newwin(h,w,y,x);
+    box(_win, 0, 0);
+    wrefresh(_win);
+    return _win;
+}
+
+void wMenuText(WINDOW *win, string *strings, int len) {
+    int w, h, offset;
+    getmaxyx(win, h, w);
+    offset = len/2;
+    for (int i = 0; i < len; i++) {
+        mvwprintw(win, (h/2) + i - offset, (w/2) - (strings[i].size()/2), strings[i].c_str());
+    }
+    wrefresh(win);
 }
