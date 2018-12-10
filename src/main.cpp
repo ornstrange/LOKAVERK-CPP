@@ -30,7 +30,7 @@ int main() {
     wMenuText(loginWin, sendMenu, asize(sendMenu));
     /*
     
-    // Window
+    Window
     int winW, winH;
     winW = 50;
     winH = winW/4;
@@ -49,7 +49,7 @@ int main() {
     mvwprintw(win, winH/2 + 1, winW/2 - (strs[2].size()/2), strs[2].c_str());
     curs_set(0);
     wrefresh(win);
-    */
+   */ 
     
     getch();
 
