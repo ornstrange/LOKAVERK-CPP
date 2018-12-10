@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <curses.h>
+#include <ncurses.h>
 #include <vmime/vmime.hpp>
 #include "strings.hpp"
 using namespace std;
@@ -10,14 +10,14 @@ using namespace std;
 
 // Helper declerations
 WINDOW * createWindow(int x, int y, int w, int h);
-void wMenuText(WINDOW *win, string *strings, int len);
+int wMenuText(WINDOW *win, string *strings, int len);
 
 int main() {
     // Init
-    int h, w;
+    int h, w, mPos;
     initscr();
     start_color();
-    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);
     cbreak();
     noecho();
     keypad(stdscr, TRUE);
@@ -26,8 +26,9 @@ int main() {
 
     // Windows
     WINDOW *loginWin;
-    loginWin = createWindow(0,0,50,11);
-    wMenuText(loginWin, sendMenu, asize(sendMenu));
+    loginWin = createWindow(0,0,50,21);
+    mPos = wMenuText(loginWin, sendMenu, asize(sendMenu));
+
     /*
     
     Window
@@ -66,12 +67,18 @@ WINDOW * createWindow(int x, int y, int w, int h) {
     return _win;
 }
 
-void wMenuText(WINDOW *win, string *strings, int len) {
+int wMenuText(WINDOW *win, string *strings, int len) {
     int w, h, offset;
     getmaxyx(win, h, w);
     offset = len/2;
+    wattron(win, A_DIM);
     for (int i = 0; i < len; i++) {
         mvwprintw(win, (h/2) + i - offset, (w/2) - (strings[i].size()/2), strings[i].c_str());
+        if (i == 0) {
+            wmove(win , (h/2) - offset, (w/2) - (strings[i].size()/2) - 1);
+            wchgat(win, strings[i].size() + 2, A_NORMAL, 0, NULL);
+        }
     }
     wrefresh(win);
+    return (h/2) - offset;
 }
