@@ -1,10 +1,6 @@
 /*
 Output:
-session created
-transport url set: smtp://smtp.gmail.com:456
-terminate called after throwing an instance of 'vmime::exceptions::connection_error'
-  what():  Error while connecting socket.
-Aborted (core dumped)
+socket error.
 
 ToDo:
 Fix ¯\_(ツ)_/¯
@@ -55,10 +51,11 @@ void BuildEmail(){
 }
 
 int main(){
+	vmime::platform::setHandler<vmime::platforms::posix::posixHandler>();
 	//gmail demo
 	myAuthenticator usr;
 	std::string str1 = "smtp:/";
-	std::string str2 = "/smtp.gmail.com:456";
+	std::string str2 = "/smtp.gmail.com:465";
 	std::string Gmail = str1 + str2;//I aM a GeNiUs
 	const vmime::string msgData =
 	"From: me@example.com \r \n"
@@ -77,8 +74,8 @@ int main(){
 	//connect it
 	tr->setProperty("connection.tls",true);
 	tr->setProperty("options.need-authentication",true);
-	tr->setProperty("auth.username","You@example.com");
-	tr->setProperty("auth.password", "yourPassword");
+	tr->setProperty("auth.username","From@example.com");
+	tr->setProperty("auth.password", "password");
 	tr->setProperty("auth.accesstoken","yourAccessToken ");
 	tr->connect();
 	std::cout << "connected" << std::endl;
